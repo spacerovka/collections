@@ -91,8 +91,16 @@ public class HashMap<K, V>
     private void checkLoadFactorAndResize() {
         if (array.length * loadFactor >= size) {
             Node<K, V>[] newArr = new Node[array.length];
-            System.arraycopy(array, 0, newArr, 0, newArr.length);
+            Node<K, V>[] oldArr = array;
             array = newArr;
+            for (Node node : oldArr) {
+                if (node != null) {
+                    put((K) node.getKey(), (V) node.getValue());
+                    while (node.next != null) {
+                        put((K) node.next.getKey(), (V) node.next.getValue());
+                    }
+                }
+            }
         }
     }
 
@@ -122,9 +130,21 @@ public class HashMap<K, V>
     }
 
     public boolean containsValue(Object value) {
-        // TODO: 09.11.2017
-        //iterate for all array
-        // for not null iterate from start to next and return if it is equal
+        for (int i = 0; i < array.length; i++) {
+            Node<K, V> existingNode = array[i];
+            if (existingNode != null) {
+                if (existingNode.getValue() == null ? value == null : existingNode.getValue().equals(value)) {
+                    return true;
+                }
+            }
+            while (existingNode.next != null) {
+                Node<K, V> nextNode = existingNode.next;
+                if (existingNode.getValue() == null ? value == null : existingNode.getValue().equals(value)) {
+                    return true;
+                }
+            }
+
+        }
         return false;
     }
 
@@ -132,7 +152,6 @@ public class HashMap<K, V>
         return entrySet;
     }
 
-    //    Returns the value to which the specified key is mapped, or null if this map contains no mapping for the key.
     public V get(Object key) {
         Node<K, V> node = getNode(key);
         return node != null ? node.getValue() : null;
@@ -160,7 +179,22 @@ public class HashMap<K, V>
 
         @Override
         public boolean contains(Object key) {
-            // TODO: 09.11.2017
+            int keyHash = hash(key);
+            int index = keyHash & (array.length - 1);
+            Node<K, V> existingNode = array[index];
+            if (existingNode != null) {
+                if (existingNode.hash == keyHash && existingNode.getKey().equals(key)) {
+                    return true;
+                } else {
+                    while (existingNode.next != null) {
+                        Node nextNode = existingNode.next;
+                        if (nextNode.hash == keyHash && nextNode.getKey().equals(key)) {
+                            return true;
+                        }
+                        existingNode = nextNode;
+                    }
+                }
+            }
             return false;
         }
     }
@@ -171,27 +205,79 @@ public class HashMap<K, V>
     }
 
     public V remove(Object key) {
-        // TODO: 09.11.2017
-        //check if it is in [] if has next - set next to this position
-        //go further next and find element - set next to its position
-        //return element value or null
+        int keyHash = hash(key);
+        int index = keyHash & (array.length - 1);
+        Node<K, V> existingNode = array[index];
+        if (existingNode != null) {
+            if (existingNode.hash == keyHash && existingNode.getKey().equals(key)) {
+                array[index] = existingNode.next;
+                size--;
+                return existingNode.getValue();
+            } else {
+                while (existingNode.next != null) {
+                    Node nextNode = existingNode.next;
+                    if (nextNode.hash == keyHash && nextNode.getKey().equals(key)) {
+                        existingNode.next = nextNode.next;
+                        size--;
+                        return (V) nextNode.getValue();
+                    }
+                    existingNode = nextNode;
+                }
+            }
+        }
         return null;
     }
 
     public V put(K key, V value) {
-        // TODO: 09.11.2017
-        //check if [size-1 & hash] is null and create new node
-        // not nll - check hash and key - set element to it
-        // go next until match of key-value or null
-        //set element value to new data
-        return null;
+        checkLoadFactorAndResize();
+        int keyHash = hash(key);
+        int index = keyHash & (array.length - 1);
+        Node<K, V> existingNode = array[index];
+        if (existingNode == null) {
+            array[index] = new Node<K, V>(key, value, null);
+            size++;
+            return value;
+        } else {
+            if (existingNode.hash == keyHash && existingNode.getKey().equals(key)) {
+                V prevValue = existingNode.getValue();
+                existingNode.setValue(value);
+                size++;
+                return prevValue;
+            } else {
+                while (existingNode.next != null) {
+                    Node nextNode = existingNode.next;
+                    if (nextNode.hash == keyHash && nextNode.getKey().equals(key)) {
+                        V prevValue = (V) nextNode.getValue();
+                        nextNode.setValue(value);
+                        size++;
+                        return prevValue;
+                    }
+                    existingNode = nextNode;
+                }
+                existingNode.next = new Node<K, V>(key, value, null);
+                size++;
+                return value;
+            }
+        }
     }
 
     private Node<K, V> getNode(Object key) {
-        // TODO: 09.11.2017
-        // get node by hash and key
-        //if node hash is eq and key is eq - return it
-        //or go to node.next till hash and key is equal
+        int keyHash = hash(key);
+        int index = keyHash & (array.length - 1);
+        Node<K, V> existingNode = array[index];
+        if (existingNode != null) {
+            if (existingNode.hash == keyHash && existingNode.getKey().equals(key)) {
+                return existingNode;
+            } else {
+                while (existingNode.next != null) {
+                    Node nextNode = existingNode.next;
+                    if (nextNode.hash == keyHash && nextNode.getKey().equals(key)) {
+                        return nextNode;
+                    }
+                    existingNode = nextNode;
+                }
+            }
+        }
         return null;
     }
 
