@@ -67,9 +67,7 @@ public class HashSet<E> extends AbstractSet<E>
     }
 
     public Iterator<E> iterator() {
-
-        // TODO: 09.11.2017 implement iterator
-        return null;
+        return innerMap.keySet().iterator();
     }
 
     public boolean remove(Object o) {

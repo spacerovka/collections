@@ -4,23 +4,23 @@ import java.io.Serializable;
 import java.util.*;
 
 
-public class MyArrayList<E> extends AbstractList<E>
+public class ArrayList<E> extends AbstractList<E>
         implements List<E>, RandomAccess, Cloneable, Serializable {
 
     private Object[] list;
     private int size;
 
-    public <E> MyArrayList() {
+    public <E> ArrayList() {
         list = new Object[10];
         size = 0;
     }
 
-    public <E> MyArrayList(int capacity) {
+    public <E> ArrayList(int capacity) {
         list = new Object[capacity];
         size = capacity;
     }
 
-    public <E> MyArrayList(Collection<? extends E> collection) {
+    public <E> ArrayList(Collection<? extends E> collection) {
         size = collection.size();
         list = new Object[size];
         int index = 0;
@@ -101,7 +101,7 @@ public class MyArrayList<E> extends AbstractList<E>
 
     @Override
     public Object clone() {
-        List<E> newList = new MyArrayList<E>();
+        List<E> newList = new ArrayList<E>();
         for (int i = 0; i < size; i++) {
             newList.add((E) list[i]);
         }
@@ -248,7 +248,7 @@ public class MyArrayList<E> extends AbstractList<E>
     public List<E> subList(int fromIndex, int toIndex) {
         if (fromIndex < 0 || toIndex > size) throw new IndexOutOfBoundsException();
         if (fromIndex > toIndex) throw new IllegalArgumentException();
-        List<E> newList = new MyArrayList<>();
+        List<E> newList = new ArrayList<>();
         if (fromIndex == toIndex) return newList;
         for (int i = fromIndex; i < toIndex; i++) {
             newList.add((E) list[i]);

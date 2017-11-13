@@ -14,54 +14,7 @@ public class HashMap<K, V>
     private float loadFactor;
     private EntrySet<K, V> entrySet = new EntrySet<>();
 
-    static class Node<K, V> implements Map.Entry {
 
-        private int hash;
-        private K key;
-        private V value;
-        private Node<K, V> next;
-
-        public Node(K key, V value, Node<K, V> next) {
-            this.key = key;
-            this.value = value;
-            this.next = next;
-            hash = hash(key);
-        }
-
-        @Override
-        public K getKey() {
-            return key;
-        }
-
-
-        @Override
-        public V getValue() {
-            return value;
-        }
-
-        @Override
-        public V setValue(Object value) {
-            return this.value = (V) value;
-        }
-    }
-
-    class EntrySet<K, V> extends AbstractSet<Map.Entry<K, V>> {
-
-        @Override
-        public Iterator<Entry<K, V>> iterator() {
-            // TODO: 09.11.2017 implement entry iterator
-            return null;
-        }
-
-        @Override
-        public int size() {
-            return size;
-        }
-
-        public void clear() {
-            this.clear();
-        }
-    }
 
     public HashMap() {
         this(16, 0.75F);
@@ -89,15 +42,18 @@ public class HashMap<K, V>
     }
 
     private void checkLoadFactorAndResize() {
-        if (array.length * loadFactor >= size) {
+        if (size >= array.length * loadFactor) {
             Node<K, V>[] newArr = new Node[array.length];
             Node<K, V>[] oldArr = array;
             array = newArr;
+            size = 0;
             for (Node node : oldArr) {
                 if (node != null) {
                     put((K) node.getKey(), (V) node.getValue());
-                    while (node.next != null) {
+                    Node nextNode = node.next;
+                    while (nextNode != null) {
                         put((K) node.next.getKey(), (V) node.next.getValue());
+                        nextNode = nextNode.next;
                     }
                 }
             }
@@ -168,8 +124,7 @@ public class HashMap<K, V>
     class KeyCollection extends AbstractSet<K> {
         @Override
         public Iterator<K> iterator() {
-            // TODO: 09.11.2017 imlement set iterator
-            return null;
+            return new KeyIterator();
         }
 
         @Override
@@ -293,8 +248,7 @@ public class HashMap<K, V>
 
         @Override
         public Iterator<V> iterator() {
-            // TODO: 09.11.2017 implement values iterator
-            return null;
+            return new ValueIterator();
         }
 
         @Override
@@ -306,5 +260,117 @@ public class HashMap<K, V>
     private static int hash(Object element) {
         return element == null ? 0 : element.hashCode();
     }
+
+    static class Node<K, V> implements Map.Entry {
+
+        private int hash;
+        private K key;
+        private V value;
+        private Node<K, V> next;
+
+        public Node(K key, V value, Node<K, V> next) {
+            this.key = key;
+            this.value = value;
+            this.next = next;
+            hash = hash(key);
+        }
+
+        @Override
+        public K getKey() {
+            return key;
+        }
+
+
+        @Override
+        public V getValue() {
+            return value;
+        }
+
+        @Override
+        public V setValue(Object value) {
+            return this.value = (V) value;
+        }
+    }
+
+    class EntrySet<K, V> extends AbstractSet<Map.Entry<K, V>> {
+
+        @Override
+        public Iterator iterator() {
+            return new EntryIterator();
+        }
+
+        @Override
+        public int size() {
+            return size;
+        }
+
+        public void clear() {
+            this.clear();
+        }
+    }
+
+    public class NodeIterator {
+
+        private Node<K, V> next;
+        private Node<K, V> current;
+        private int currentIndex = -1;
+
+        public boolean hasNext() {
+            if (current != null && current.next != null) {
+                return true;
+            }
+            if (currentIndex + 1 < array.length) {
+                for (int i = currentIndex + 1; i < array.length - 1; i++) {
+                    if (array[i] != null) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+
+        public Entry<K, V> nextNode() {
+            if (current != null && current.next != null) {
+                next = current.next;
+                current = next;
+                return next;
+            }
+            for (int i = currentIndex + 1; i < array.length - 1; i++) {
+                if (array[i] != null) {
+                    next = array[i];
+                    currentIndex = i;
+                    current = next;
+                    return next;
+                }
+            }
+            return null;
+        }
+    }
+
+    public class EntryIterator extends NodeIterator implements Iterator<Map.Entry<K, V>> {
+
+        @Override
+        public Entry<K, V> next() {
+            return nextNode();
+        }
+    }
+
+    public class KeyIterator extends NodeIterator implements Iterator<K> {
+
+        @Override
+        public K next() {
+            return nextNode().getKey();
+        }
+    }
+
+    public class ValueIterator extends NodeIterator implements Iterator<V> {
+
+        @Override
+        public V next() {
+            return nextNode().getValue();
+        }
+    }
+
 
 }

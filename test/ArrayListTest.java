@@ -1,10 +1,9 @@
-import collections.MyArrayList;
+import collections.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,19 +17,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @RunWith(JUnit4.class)
 public class ArrayListTest {
 
-    private MyArrayList<String> list;
-    private ArrayList<String> collection;
+    private ArrayList<String> list;
+    private java.util.ArrayList collection;
 
     @Before
     public void init() {
-        list = new MyArrayList<String>();
+        list = new ArrayList<String>();
         list.add("zero");
         list.add("one");
         list.add("two");
         list.add("three");
         list.add("four");
 
-        collection = new java.util.ArrayList<String>();
+        collection = new java.util.ArrayList();
         collection.add("collection_0");
         collection.add("collection_1");
     }
@@ -38,7 +37,7 @@ public class ArrayListTest {
     @Test
     public void testConstructorAndGet() {
 
-        List<String> myList = new MyArrayList<>(collection);
+        List<String> myList = new ArrayList<>(collection);
         assertEquals("collection_1", myList.get(1));
     }
 

@@ -1,13 +1,32 @@
+import collections.HashMap;
+import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Svetotulichka on 07.11.2017.
  */
 public class HashMapTest {
 
+    private HashMap<String, String> baseMap;
+
+    @Before
+    public void init() {
+        baseMap = new HashMap<String, String>();
+        baseMap.put("one", "is good");
+        baseMap.put("two", "is bad");
+    }
+
     @Test
-    //    Constructs an empty HashMap with the specified initial capacity and the default load factor (0.75).
     public void testConstructorHashMap() {
+        HashMap myMap = new HashMap();
+        assertTrue(myMap.isEmpty());
+        HashMap mySecondMap = new HashMap(baseMap);
+        assertEquals(2, mySecondMap.size());
+        assertTrue(mySecondMap.containsKey("one"));
+        assertTrue(mySecondMap.containsValue("is good"));
     }
 
     @Test
