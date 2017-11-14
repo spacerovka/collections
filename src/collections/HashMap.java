@@ -16,7 +16,6 @@ public class HashMap<K, V>
     private EntrySet<K, V> entrySet = new EntrySet<>();
 
 
-
     public HashMap() {
         this(16, 0.75F);
     }
