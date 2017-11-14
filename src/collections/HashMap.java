@@ -370,6 +370,4 @@ public class HashMap<K, V>
             return nextNode().getValue();
         }
     }
-
-
 }

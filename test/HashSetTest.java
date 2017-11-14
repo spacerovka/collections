@@ -23,7 +23,7 @@ public class HashSetTest {
 
     @Test
     public void testConstructorsAndSize() {
-        Set<String> testSet = new HashSet<>();
+        Set<String> testSet = new HashSet<>(20, 0.5F);
         assertEquals(0, testSet.size());
     }
 

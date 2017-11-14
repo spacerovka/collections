@@ -25,7 +25,7 @@ public class HashMapTest {
 
     @Test
     public void testConstructorHashMap() {
-        HashMap myMap = new HashMap();
+        HashMap myMap = new HashMap(30, 0.9F);
         assertTrue(myMap.isEmpty());
     }
 

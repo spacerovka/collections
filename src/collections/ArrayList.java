@@ -133,8 +133,6 @@ public class ArrayList<E> extends AbstractList<E>
         }
         return (E) list[index];
     }
-//    Returns the element at the specified position in this list.
-
 
     @Override
     public int indexOf(Object o) {
@@ -323,15 +321,6 @@ public class ArrayList<E> extends AbstractList<E>
             this(-1);
         }
 
-        /**
-         * Returns {@code true} if this list iterator has more elements when
-         * traversing the list in the forward direction. (In other words,
-         * returns {@code true} if {@link #next} would return an element rather
-         * than throwing an exception.)
-         *
-         * @return {@code true} if the list iterator has more elements when
-         * traversing the list in the forward direction
-         */
         @Override
         public boolean hasNext() {
             try {
@@ -343,16 +332,6 @@ public class ArrayList<E> extends AbstractList<E>
             return true;
         }
 
-        /**
-         * Returns the next element in the list and advances the cursor position.
-         * This method may be called repeatedly to iterate through the list,
-         * or intermixed with calls to {@link #previous} to go back and forth.
-         * (Note that alternating calls to {@code next} and {@code previous}
-         * will return the same element repeatedly.)
-         *
-         * @return the next element in the list
-         * @throws NoSuchElementException if the iteration has no next element
-         */
         @Override
         public E next() {
             if (currentIndex + 1 == size) throw new NoSuchElementException();
@@ -361,15 +340,6 @@ public class ArrayList<E> extends AbstractList<E>
         }
 
 
-        /**
-         * Returns {@code true} if this list iterator has more elements when
-         * traversing the list in the reverse direction.  (In other words,
-         * returns {@code true} if {@link #previous} would return an element
-         * rather than throwing an exception.)
-         *
-         * @return {@code true} if the list iterator has more elements when
-         * traversing the list in the reverse direction
-         */
         @Override
         public boolean hasPrevious() {
             try {
@@ -381,18 +351,6 @@ public class ArrayList<E> extends AbstractList<E>
             return true;
         }
 
-        /**
-         * Returns the previous element in the list and moves the cursor
-         * position backwards.  This method may be called repeatedly to
-         * iterate through the list backwards, or intermixed with calls to
-         * {@link #next} to go back and forth.  (Note that alternating calls
-         * to {@code next} and {@code previous} will return the same
-         * element repeatedly.)
-         *
-         * @return the previous element in the list
-         * @throws NoSuchElementException if the iteration has no previous
-         *                                element
-         */
         @Override
         public E previous() {
             if (currentIndex - 1 == -1) throw new NoSuchElementException();
@@ -400,29 +358,11 @@ public class ArrayList<E> extends AbstractList<E>
             return (E) list[currentIndex];
         }
 
-        /**
-         * Returns the index of the element that would be returned by a
-         * subsequent call to {@link #next}. (Returns list size if the list
-         * iterator is at the end of the list.)
-         *
-         * @return the index of the element that would be returned by a
-         * subsequent call to {@code next}, or list size if the list
-         * iterator is at the end of the list
-         */
         @Override
         public int nextIndex() {
             return currentIndex == (size - 1) ? size : currentIndex + 1;
         }
 
-        /**
-         * Returns the index of the element that would be returned by a
-         * subsequent call to {@link #previous}. (Returns -1 if the list
-         * iterator is at the beginning of the list.)
-         *
-         * @return the index of the element that would be returned by a
-         * subsequent call to {@code previous}, or -1 if the list
-         * iterator is at the beginning of the list
-         */
         @Override
         public int previousIndex() {
             return currentIndex - 1;
