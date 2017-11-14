@@ -1,9 +1,13 @@
+import collections.ArrayList;
 import collections.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by Svetotulichka on 07.11.2017.
@@ -23,6 +27,10 @@ public class HashMapTest {
     public void testConstructorHashMap() {
         HashMap myMap = new HashMap();
         assertTrue(myMap.isEmpty());
+    }
+
+    @Test
+    public void testConstructorFromMap() {
         HashMap mySecondMap = new HashMap(baseMap);
         assertEquals(2, mySecondMap.size());
         assertTrue(mySecondMap.containsKey("one"));
@@ -30,79 +38,97 @@ public class HashMapTest {
     }
 
     @Test
-    //    Removes all of the mappings from this map.
     public void clear() {
+        baseMap.clear();
+        assertFalse(baseMap.containsKey("one"));
     }
 
     @Test
-    //    Returns a shallow copy of this HashMap instance: the keys and values themselves are not cloned.
     public void testClone() {
+        Map<String, String> cloned = baseMap.clone();
+        assertEquals(2, cloned.size());
+        assertTrue(cloned.containsKey("one"));
+        assertTrue(cloned.containsValue("is bad"));
     }
 
     @Test
-    //    Returns true if this map contains a mapping for the specified key.
     public void containsKey() {
+        assertTrue(baseMap.containsKey("one"));
+        assertFalse(baseMap.containsKey("none"));
+
     }
 
     @Test
-    //    Returns true if this map maps one or more keys to the specified value.
     public void containsValue() {
+        assertTrue(baseMap.containsValue("is bad"));
+        assertFalse(baseMap.containsValue("none"));
     }
 
     @Test
-    //    Returns a Set view of the mappings contained in this map.
     public void entrySet() {
+        Set<Map.Entry<String, String>> entrySet = baseMap.entrySet();
+        assertEquals("one", entrySet.iterator().next().getKey());
     }
 
     @Test
-    //    Returns true if this map contains no key-value mappings.
     public void isEmpty() {
+        assertFalse(baseMap.isEmpty());
+        assertTrue(new HashMap().isEmpty());
     }
 
     @Test
-    //    Returns a Set view of the keys contained in this map.
     public void keySet() {
+        Set<String> keySet = baseMap.keySet();
+        assertTrue(keySet.contains("one"));
     }
 
 
     @Test
-    //    Associates the specified value with the specified key in this map.
     public void put() {
+        baseMap.put("three", "new value");
+        assertTrue(baseMap.containsKey("three"));
+        assertTrue(baseMap.containsValue("new value"));
     }
 
     @Test
-    //    Copies all of the mappings from the specified map to this map.
     public void putAll() {
+        HashMap<String, String> newMap = new HashMap<>();
+        newMap.put("3", "003");
+        newMap.put("4", "004");
+        baseMap.putAll(newMap);
+        assertTrue(baseMap.containsKey("3"));
+        assertTrue(baseMap.containsValue("003"));
+        assertTrue(baseMap.containsKey("4"));
+        assertTrue(baseMap.containsValue("004"));
+        assertEquals(4, baseMap.size());
+
     }
 
     @Test
-    //    Removes the mapping for the specified key from this map if present.
     public void remove() {
+        baseMap.remove("one");
+        assertEquals(1, baseMap.size());
+        assertFalse(baseMap.containsKey("one"));
     }
 
     @Test
     //    Removes the entry for the specified key only if it is currently mapped to the specified value.
     public void removeWithValue() {
+        baseMap.remove("one", "is good");
+        assertEquals(1, baseMap.size());
+        assertFalse(baseMap.containsKey("one"));
+
+        baseMap.remove("two", "is good");
+        assertEquals(1, baseMap.size());
+        assertTrue(baseMap.containsKey("two"));
     }
 
-    @Test
-    //    Replaces the entry for the specified key only if it is currently mapped to some value.
-    public void replace() {
-    }
 
     @Test
-    //    Replaces the entry for the specified key only if currently mapped to the specified value.
-    public void replaceWithValue() {
-    }
-
-    @Test
-    //    Replaces each entry's value with the result of invoking the given function on that entry until all entries have been processed or the function throws an exception.
-    public void replaceAll() {
-    }
-
-    @Test
-    //    Returns a Collection view of the values contained in this map.
     public void values() {
+        List<String> values = new ArrayList<>(baseMap.values());
+        assertEquals("is good", values.get(0));
+        assertEquals("is bad", values.get(1));
     }
 
 }

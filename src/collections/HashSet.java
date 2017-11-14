@@ -12,7 +12,6 @@ import java.util.Set;
 public class HashSet<E> extends AbstractSet<E>
         implements Set<E>, Cloneable, Serializable {
 
-    private int size = 0;
     private HashMap<E, Byte> innerMap;
     private byte EXISTS = 1;
 
@@ -41,10 +40,10 @@ public class HashSet<E> extends AbstractSet<E>
     }
 
     public void clear() {
-        innerMap.clear();
+        innerMap = new HashMap<>(size());
     }
 
-    public Object clone() {
+    public HashSet<E> clone() {
         HashSet<E> newSet = null;
         try {
             newSet = (HashSet<E>) super.clone();
@@ -63,7 +62,7 @@ public class HashSet<E> extends AbstractSet<E>
     }
 
     public boolean isEmpty() {
-        return size == 0;
+        return innerMap.size() == 0;
     }
 
     public Iterator<E> iterator() {
@@ -75,6 +74,6 @@ public class HashSet<E> extends AbstractSet<E>
     }
 
     public int size() {
-        return size;
+        return innerMap.size();
     }
 }

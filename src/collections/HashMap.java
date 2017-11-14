@@ -1,5 +1,6 @@
 package collections;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -7,7 +8,7 @@ import java.util.*;
  */
 public class HashMap<K, V>
         extends AbstractMap<K, V>
-        implements Map<K, V> {
+        implements Map<K, V>, Cloneable, Serializable {
 
     private int size = 0;
     private Node<K, V>[] array;
@@ -67,7 +68,7 @@ public class HashMap<K, V>
     }
 
 
-    public Object clone() {
+    public HashMap<K, V> clone() {
         HashMap<K, V> newHashMap = null;
         try {
             newHashMap = (HashMap<K, V>) super.clone();
@@ -92,14 +93,13 @@ public class HashMap<K, V>
                 if (existingNode.getValue() == null ? value == null : existingNode.getValue().equals(value)) {
                     return true;
                 }
-            }
-            while (existingNode.next != null) {
-                Node<K, V> nextNode = existingNode.next;
-                if (existingNode.getValue() == null ? value == null : existingNode.getValue().equals(value)) {
-                    return true;
+                while (existingNode.next != null) {
+                    Node<K, V> nextNode = existingNode.next;
+                    if (existingNode.getValue() == null ? value == null : existingNode.getValue().equals(value)) {
+                        return true;
+                    }
                 }
             }
-
         }
         return false;
     }
@@ -261,7 +261,7 @@ public class HashMap<K, V>
         return element == null ? 0 : element.hashCode();
     }
 
-    static class Node<K, V> implements Map.Entry {
+    class Node<K, V> implements Map.Entry {
 
         private int hash;
         private K key;
