@@ -131,4 +131,12 @@ public class HashMapTest {
         assertEquals("is bad", values.get(1));
     }
 
+    @Test
+    public void nullKey() {
+        baseMap.put(null, "null");
+        assertEquals("null", baseMap.get(null));
+        baseMap.remove(null);
+        assertEquals(null, baseMap.get(null));
+    }
+
 }

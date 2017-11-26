@@ -137,7 +137,7 @@ public class HashMap<K, V>
             int index = keyHash & (array.length - 1);
             Node<K, V> existingNode = array[index];
             if (existingNode != null) {
-                if (existingNode.hash == keyHash && existingNode.getKey().equals(key)) {
+                if (existingNode.hash == keyHash && (existingNode.getKey() == key || (key != null && existingNode.getKey().equals(key)))) {
                     return true;
                 } else {
                     while (existingNode.next != null) {
@@ -163,7 +163,7 @@ public class HashMap<K, V>
         int index = keyHash & (array.length - 1);
         Node<K, V> existingNode = array[index];
         if (existingNode != null) {
-            if (existingNode.hash == keyHash && existingNode.getKey().equals(key)) {
+            if (existingNode.hash == keyHash && (existingNode.getKey() == key || (key != null && existingNode.getKey().equals(key)))) {
                 array[index] = existingNode.next;
                 size--;
                 return existingNode.getValue();
@@ -192,7 +192,7 @@ public class HashMap<K, V>
             size++;
             return value;
         } else {
-            if (existingNode.hash == keyHash && existingNode.getKey().equals(key)) {
+            if (existingNode.hash == keyHash && (existingNode.getKey() == key || (key != null && existingNode.getKey().equals(key)))) {
                 V prevValue = existingNode.getValue();
                 existingNode.setValue(value);
                 size++;
@@ -220,7 +220,7 @@ public class HashMap<K, V>
         int index = keyHash & (array.length - 1);
         Node<K, V> existingNode = array[index];
         if (existingNode != null) {
-            if (existingNode.hash == keyHash && existingNode.getKey().equals(key)) {
+            if (existingNode.hash == keyHash && (existingNode.getKey() == key || (key != null && existingNode.getKey().equals(key)))) {
                 return existingNode;
             } else {
                 while (existingNode.next != null) {
